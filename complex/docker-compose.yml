@@ -5,6 +5,9 @@ services:
   redis:
     image: 'redis:latest'
   nginx:
+    depends_on:
+      - api
+      - client
     restart: always
     build:
       dockerfile: Dockerfile.dev
@@ -12,6 +15,9 @@ services:
     ports:
       - '3050:80'
   api:
+    depends_on:
+      - postgres
+      - redis
     build:
       dockerfile: Dockerfile.dev
       context: ./server
@@ -27,6 +33,8 @@ services:
       - PGPASSWORD=postgres_password
       - PGPORT=5432
   client:
+    depends_on:
+      - api
     build:
       dockerfile: Dockerfile.dev
       context: ./client
@@ -34,6 +42,8 @@ services:
       - /app/node_modules
       - ./client:/app
   worker:
+    depends_on:
+      - redis
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -43,3 +53,4 @@ services:
     volumes:
       - /app/node_modules
       - ./worker:/app
+# try 2 for 502 lots of depends_on as per https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/learn/lecture/11500814#questions/7553616

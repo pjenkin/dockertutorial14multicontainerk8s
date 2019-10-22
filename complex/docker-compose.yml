@@ -5,7 +5,7 @@ services:
   redis:
     image: 'redis:latest'
   nginx:
-    depends_on:
+    depends_on:    # commented-out as per https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/learn/lecture/11500816?%24web_only=true&~channel=email&~stage=published&%24fallback_url=https%3A%2F%2Fwww.udemy.com%2Fcourse%2Fdocker-and-kubernetes-the-complete-guide%2Flearn%2F&utm_campaign=email&utm_source=sendgrid.com&utm_medium=email&_branch_match_id=712232663642435582#questions/8464568
       - api
       - client
     restart: always
@@ -15,9 +15,9 @@ services:
     ports:
       - '3050:80'
   api:
-    depends_on:
-      - postgres
-      - redis
+    #depends_on:
+      #- postgres
+      #- redis
     build:
       dockerfile: Dockerfile.dev
       context: ./server
@@ -33,8 +33,8 @@ services:
       - PGPASSWORD=postgres_password
       - PGPORT=5432
   client:
-    depends_on:
-      - api
+    #depends_on:
+      #- api
     build:
       dockerfile: Dockerfile.dev
       context: ./client
@@ -42,8 +42,8 @@ services:
       - /app/node_modules
       - ./client:/app
   worker:
-    depends_on:
-      - redis
+    #depends_on:
+      #- redis
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379

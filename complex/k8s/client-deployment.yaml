@@ -17,5 +17,5 @@ spec:
         - name: client
           image: peternjenkin/multi-client
           ports:
-            -containerPort: 3000
+            - containerPort: 3000
           

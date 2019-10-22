@@ -1,0 +1,21 @@
+# 14-200 'recreating the deployment' ie putting the design into effect
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+spec:
+  replicas: 3   # 3 replicas to be managed by deployment
+  selector:
+    matchLabels:
+      component: web
+  template:
+    metadata:
+      labels:
+        component: web  # slightly arbitrary key/value, but used to identify deployments
+    spec:
+      containers:  # containers running in this pod
+        - name: client
+          image: peternjenkin/multi-client
+          ports:
+            -containerPort: 3000
+          

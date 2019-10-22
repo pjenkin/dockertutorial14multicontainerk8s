@@ -1,0 +1,12 @@
+# 14-202 the ClusterIP config
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector: # to what set of pods is access to be provided by this clusterIP? (use the label)
+    component: web   # this is the label used by client-deployment Deployment (so this is to what the ClusterIP will provide access)
+  ports:
+    - port: 3000
+    targetPort: 3000

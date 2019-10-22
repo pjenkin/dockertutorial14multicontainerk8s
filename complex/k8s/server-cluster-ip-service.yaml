@@ -8,5 +8,5 @@ spec:
   selector: 
     component: server   # to match the 'component: server' in the server-deployment's spec and its metadata spec
   ports:
-  - ports: 3000
+  - port: 3000
     targetPort: 3000  # NB ports details same as for client-cluster-ip-service

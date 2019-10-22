@@ -2,12 +2,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: database-persistent-volume-claim
+  name: database-persistent-volume-claim # to match in postgres deployment
 spec:
-  volumes:
-      -name: postgres-storage
-          persistentVolumeClaim:
-              claimName: database-persistent-volume-claim
   accessModes:
     - ReadWriteOnce
   resources:

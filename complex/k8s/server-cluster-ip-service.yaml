@@ -1,0 +1,12 @@
+# 14-205 ClusterIP service config - this one for the multi-server aka Express API deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: server-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector: 
+    component: server   # to match the 'component: server' in the server-deployment's spec and its metadata spec
+  ports:
+  - ports: 3000
+    targetPort: 3000  # NB ports details same as for client-cluster-ip-service

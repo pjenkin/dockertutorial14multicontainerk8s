@@ -1,4 +1,4 @@
-# 14-207 Worker Deployment (config for same)
+# 14-207 Worker Deployment (config for same) aka multi-worker
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -8,7 +8,7 @@ spec:
   selector:
     matchLabels:
       component: worker
-  template:
+  template:   # the pod template
     metadata:
       labels:
         component: worker
@@ -16,5 +16,11 @@ spec:
       containers:
         - name: worker
           image: peternjenkin/multi-worker
-        # to do - environment variables (once redis set up & CI on the way)
+        # to do - done below - environment variables (once redis set up & CI on the way)
+          env:    # key/value pairs for environment variables 14-222
+            - name: REDIS_HOST  # name of appropriate clusterIP service
+              value: redis-cluster-ip-service
+            - name: REDIS_PORT  # port of appropriate cluster via ClusterIP
+              value: '6379'
+            
 # NB in system design diagram, nothing needing to connect to worker - so no ClusterIP service needed to allow traffic

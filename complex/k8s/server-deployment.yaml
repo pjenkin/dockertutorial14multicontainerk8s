@@ -18,3 +18,24 @@ spec:
           image: peternjenkin/multi-server  # key/values environment variables to be added here
           ports:
             - containerPort: 5000
+          env:  # environment variables with key/value - 14-224 'Passing secrets as environment variables'
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service   # obtained from metadata:name of ClusterIP for redis ie redis-cluster-ip-service.yaml
+            - name: REDIS_PORT
+              value: '6379'   # NB must be as string not integer else "cannot convert int64 to string" error will be seen
+            - name: PGUSER 
+              value: postgres  # default PostGres user name is 'postgres'
+            - name: PGHOST
+              value: postgres-cluster-ip-service # from metadata:name in config file for Postgres's ClusterIP ie postgres-cluster-ip-service.yaml
+            - name: PGPORT
+              value: '5432' # Postgres default IP
+            - name: PGDATABASE
+              value: postgres # Postgres default database 'postgres'
+            - name: PGPASSWORD # the environment variable name, as PostGres default (*not* the k8s Secret name - see below for that)
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword  # the secret_name as defined in the kubectl create secret command
+                  key: PGPASSWORD   # the key as defined in the kubectl create secret command
+
+              
+

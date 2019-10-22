@@ -26,3 +26,9 @@ spec:
           - name: postgres-storage  # NB volume name (in outer spec) must match volumeMount name - use that storage for this volumeMount
             mountPath: /var/lib/postgresql/data # default path for Postgres (from docs)
             subPath: postgres # additional option required specifically by Postgres (folder name for persistent data within PVC)
+          env:    # 14-224 'Passing secrets as environment variables'
+            - name: PGPASSWORD  # the PostGres environment variable (to be used instead of PostGres's default password)
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD

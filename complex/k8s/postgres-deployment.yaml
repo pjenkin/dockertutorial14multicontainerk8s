@@ -1,0 +1,20 @@
+# 14-210 so-called 'Last set of boring config!' for PostGres - Deployment first
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1  # only 1 Postgres db running - no mirroring &c 
+  selector:
+    matchLabels:
+      component: postgres # the accompanying ClusterIP service (qv) to allow traffic in to the Postgres pod will have to find the Deployment by this label
+  template:
+    metadata:
+      labels:
+        component: postgres  # arbitrary-ish id labels
+    spec:
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - containerPort: 5432

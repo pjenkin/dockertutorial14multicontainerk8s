@@ -37,6 +37,7 @@ spec:
                 secretKeyRef:
                   name: pgpassword  # the secret_name as defined in the kubectl create secret command
                   key: PGPASSWORD   # the key as defined in the kubectl create secret command
+                  # a tiny comment to test git actions - altered again
 
               
 

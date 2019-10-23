@@ -1,0 +1,34 @@
+# 14-210 so-called 'Last set of boring config!' for PostGres - Deployment first
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1  # only 1 Postgres db running - no mirroring &c 
+  selector:
+    matchLabels:
+      component: postgres # the accompanying ClusterIP service (qv) to allow traffic in to the Postgres pod will have to find the Deployment by this label
+  template:
+    metadata:
+      labels:
+        component: postgres  # arbitrary-ish id labels
+    spec:
+      volumes:    # in 14-218 'Designating a PVC in a Pod Template'
+        - name: postgres-storage
+          persistentVolumeClaim:
+              claimName: database-persistent-volume-claim # to match in database-persistent-colume-claim PVC config file
+      containers:
+        - name: postgres
+          image: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+          - name: postgres-storage  # NB volume name (in outer spec) must match volumeMount name - use that storage for this volumeMount
+            mountPath: /var/lib/postgresql/data # default path for Postgres (from docs)
+            subPath: postgres # additional option required specifically by Postgres (folder name for persistent data within PVC)
+          env:    # 14-224 'Passing secrets as environment variables'
+            - name: PGPASSWORD  # the PostGres environment variable (to be used instead of PostGres's default password)
+              valueFrom:
+                secretKeyRef:
+                  name: pgpassword
+                  key: PGPASSWORD

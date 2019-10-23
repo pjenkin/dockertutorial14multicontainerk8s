@@ -1,0 +1,13 @@
+# 14-210 so-called 'Last set of boring config!' for PostGres - ClusterIP service second
+apiVersion: v1
+kind: Service
+metadata: 
+  name: postgres-cluster-ip-service
+spec:
+  type: ClusterIP
+  selector:
+    component: postgres   # identify the Postgres Deployment thus
+  ports:
+    - port: 5432
+      targetPort: 5432    # default Postgres port both in and out of this cluster
+

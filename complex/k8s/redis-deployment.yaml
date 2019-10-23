@@ -1,0 +1,20 @@
+# 14-209 Creating & applying Redis config - the Deployment first
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+spec:
+  replicas: 1 # not to operate in Redis cluster/shard mode - just 1 copy of Redis
+  selector:
+    matchLabels:
+      component: redis
+  template:
+    metadata:
+      labels:
+        component: redis
+    spec:
+      containers:
+        - name: redis
+          image: redis   # using public dockerhub redis image; not using custom peternjenkin/redis or whatever
+          ports:
+            - containerPort: 6379  # default Redis port

@@ -1,0 +1,22 @@
+# 14-200 'recreating the deployment' ie putting the design into effect
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+spec:
+  replicas: 3   # 3 replicas to be managed by deployment
+  selector:
+    matchLabels:
+      component: web
+  template:
+    metadata:
+      labels:
+        component: web  # slightly arbitrary key/value, but used to identify deployments
+    spec:
+      containers:  # containers running in this pod
+        - name: client
+          #image: peternjenkin/multi-client # weird - getting 503 temporarily unavailable error with my own client/React image
+          image: stephengrider/multi-client   # try using tutor's image - https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/learn/lecture/11582354#questions/8438094
+          ports:
+            - containerPort: 3000
+          

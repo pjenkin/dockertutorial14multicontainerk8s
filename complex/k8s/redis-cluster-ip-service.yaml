@@ -1,0 +1,13 @@
+# 14-209 Creating & applying Redis config - the ClusterIP first
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-cluster-ip-service  # this will be the HOST name in environment variables
+spec:
+  type: ClusterIP
+  selector:
+    component: redis # this is how the ClusterIP will be ‘clipped onto’ the redis Deployment
+  ports:
+    - port: 6379  # 6379 default Redis port
+      targetPort: 6379
+# keep ports of the deployment's access inward & outward facing the same 

@@ -1,0 +1,20 @@
+# 15-234 Creating the ingress configuration (routing rules)
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: nginx    # make ingress controller based on nginx project
+    nginx.ingress.kubernetes.io/rewrite-target: /$1 # ready to remove 'api' &c from traffic routed to server (as before with nginx)
+spec:
+  rules:
+    - http:
+        paths:    # NB a double-indent here for some reason (unknown field "paths" error otherwise)
+          - path: /?(.*) # path 1: route root / requests to the React (multi)client app's ClusterIP service
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
+          - path: /api/?(.*) # path 2: route /api  requests to the (multi)server's ClusterIP service
+            backend:
+              serviceName: server-cluster-ip-service
+              servicePort: 5000

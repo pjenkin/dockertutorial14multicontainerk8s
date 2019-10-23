@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: server
-          image: peternjenkin/multi-server  # key/values environment variables to be added here
+          #image: peternjenkin/multi-server  # key/values environment variables to be added here
+          image: stephengrider/multi-server  # key/values environment variables to be added here
           ports:
             - containerPort: 5000
           env:  # environment variables with key/value - 14-224 'Passing secrets as environment variables'

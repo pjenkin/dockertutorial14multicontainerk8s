@@ -15,7 +15,8 @@ spec:
     spec:
       containers:
         - name: worker
-          image: peternjenkin/multi-worker
+          #image: peternjenkin/multi-worker
+          image: stephengrider/multi-worker
         # to do - done below - environment variables (once redis set up & CI on the way)
           env:    # key/value pairs for environment variables 14-222
             - name: REDIS_HOST  # name of appropriate clusterIP service

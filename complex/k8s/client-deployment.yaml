@@ -15,7 +15,8 @@ spec:
     spec:
       containers:  # containers running in this pod
         - name: client
-          image: peternjenkin/multi-client
+          #image: peternjenkin/multi-client # weird - getting 503 temporarily unavailable error with my own client/React image
+          image: stephengrider/multi-client   # try using tutor's image - https://www.udemy.com/course/docker-and-kubernetes-the-complete-guide/learn/lecture/11582354#questions/8438094
           ports:
             - containerPort: 3000
           

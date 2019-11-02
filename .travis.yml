@@ -8,7 +8,7 @@ env:
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1 # configure GCE CLI to disable interactive prompts
 before_install:
 # encrypted GCE service account / Travis encrypted file here
-- curl https://sdk.cloud.google.com | bash > /dev/null/;  # fetch config file & copy to instance
+- curl https://sdk.cloud.google.com | bash > /dev/null;  # fetch config file & copy to instance
 - source $HOME/google-cloud-sdk/path.bash.inc # 'source' command is used to apply the config file
 - gcloud components update kubectl # install kubectl on instance, for future use (step 8 Apply all configs in k8s folder - see deploy.sh)
 - gcloud auth activate-service-account --key-file pj-renamed-service-account.json # equivalent to an (AWS) IAM user account (from secure file)

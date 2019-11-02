@@ -1,0 +1,19 @@
+# 18-290/18-291 The Skaffold config file
+apiVersion: skaffold/v1beta2
+kind: Config
+build: # the skaffold watch list
+  local:
+    push: false # would by default push any built image to docker hub - for local dev that frequent pushing isn't appropriate (should be string in quotes?)
+  artifacts: # artifacts are build objects
+    - image: stephengrider/multi-client
+      context: client # build context ie directory
+      docker:
+        dockerfile: Dockerfile.dev # use the development version of Dockerfile (not the production version w/o extension)
+      sync:
+        '**/*.js': . # which files to match for mode 2 (overwrite) : where to - key/value pairs - glob match file path 
+        '**/*.css': . # only these file types will be updated using mode 2 - others will be updated using mode 1 (rebuild)
+        '**/*.html': .
+deploy:
+  kubectl:
+    manifests:
+      - k8s/client-deployment.yaml # tell skaffold to manage multi-client using k8s/client-deployment file

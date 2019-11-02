@@ -1,0 +1,13 @@
+#17-280 Issuer config file - Issuer object for Cert Manager setup (cf certificate config file)
+# describe where to get to get a TLS cert
+apiVersion: certmanager.k8s.io/v1alpha1   # NB non-k8s standard object
+kind: ClusterIssuer
+metadata:
+  name: letsencryptprod   # for ease, name after source of issuer (LetsEncrypt), and version (production)
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory # the LetsEncrypt API - Automated Certificate Management Environment
+    email: 'peternjenkin@gmail.com'
+    privateKeySecretRef:
+      name: letsencrypt-prod # nothing to do with the Cert Manager Secret - passed in stages 2 & 3 of the LetsEncrypt initial verification request cert process; used there but not otherwise needed
+    http01: {} # use http process 01 (the one described) not DNS or any other

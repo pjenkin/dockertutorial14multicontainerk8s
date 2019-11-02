@@ -1,0 +1,22 @@
+#17-281 Certificate config file - Certificate object for Cert Manager setup (cf issuer config file)
+apiVersion: certmanager.k8s.io/v1alpha
+kind: Certificate
+metadata:
+  name: k8s-multi-com-tls
+spec:
+  secretName: k8s-multi-com # Put your domain name here - where to store the Secret generated & used by Cert Manager in the TLS cert process
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  commonName: k8s-multi.com # Put your domain name here - certificate will be good for this and of its subdomains - cf Common Name on any certificate in a browser
+  dnsNames: # list of domains to be associated with the TLS certificate
+    - k8s-multi.com # Put your domain name here (bare domain name as in the A record earlier)
+    - www.k8s-multi.com # Put your domain name here (www + domain name as in the CNAME record earlier)
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx
+        domains: # list of domains for the verification process to access (should be same as other list)
+          - k8s-multi.com # Put your domain name here (bare domain name as in the A record earlier)
+          - www.k8s-multi.com # Put your domain name here (www + domain name as in the CNAME record earlier)
+

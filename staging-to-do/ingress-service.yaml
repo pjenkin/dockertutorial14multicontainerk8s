@@ -1,0 +1,50 @@
+# 15-234/17-284 Creating the ingress configuration (routing rules) - edited for Ingress config for HTTPS - TLS with LetsEncrypt and CertManager
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    kubernetes.io/ingress.class: nginx    # make ingress controller based on nginx project
+    nginx.ingress.kubernetes.io/rewrite-target: /$1 # ready to remove 'api' &c from traffic routed to server (as before with nginx)
+    certmanager.k8s.io/cluster-issuer: 'letsencrypt-prod'  # HTTPS annotations added for LetsEncrypt/CertManager TLS HTTPS
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true' # HTTPS always redirect to secure HTTPS/SSL from HTTP NB 'true' as string
+spec:
+  tls: # HTTPS
+    - hosts:
+        - k8s-multi.com # Put your own domain here (bare domain name)
+        - www.k8s-multi.com # Put your own domain here (www + domain name)
+      secretName: k8s-multi-com # must be the same as in certificate.yaml
+  rules:
+#    - http:
+#        paths:    # NB a double-indent here for some reason (unknown field "paths" error otherwise)
+#          - path: /?(.*) # path 1: route root / requests to the React (multi)client app's ClusterIP service
+            backend:
+              serviceName: client-cluster-ip-service
+              servicePort: 3000
+#          - path: /api/?(.*) # path 2: route /api  requests to the (multi)server's ClusterIP service
+#            backend:
+#              serviceName: server-cluster-ip-service
+#              servicePort: 5000
+    - host: k8s-multi.com # HTTPS Put your own domain here (bare domain name) (NB re-indenting of existing http section)
+      http:
+          paths:    # NB a double-indent here for some reason (unknown field "paths" error otherwise)
+            - path: /?(.*) # path 1: route root / requests to the React (multi)client app's ClusterIP service
+              backend:
+                serviceName: client-cluster-ip-service
+                servicePort: 3000
+            - path: /api/?(.*) # path 2: route /api  requests to the (multi)server's ClusterIP service
+              backend:
+                serviceName: server-cluster-ip-service
+                servicePort: 5000              
+# HTTPS copy/paste to provide also for host www + domain name - not DRY
+    - host: www.k8s-multi.com # HTTPS Put your own domain here (www + domain name) (NB re-indenting of existing http section)
+      http:
+          paths:    # NB a double-indent here for some reason (unknown field "paths" error otherwise)
+            - path: /?(.*) # path 1: route root / requests to the React (multi)client app's ClusterIP service
+              backend:
+                serviceName: client-cluster-ip-service
+                servicePort: 3000
+            - path: /api/?(.*) # path 2: route /api  requests to the (multi)server's ClusterIP service
+              backend:
+                serviceName: server-cluster-ip-service
+                servicePort: 5000              

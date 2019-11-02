@@ -7,7 +7,7 @@ env:
     - SHA=$(git rev-parse HEAD) # get the git SHA Travis CI environment variable, accessible by deploy.sh 15-261 Updating the deployment script
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1 # configure GCE CLI to disable interactive prompts
 before_install:
-# encrypted GCE service account / Travis encrypted file here
+- openssl aes-256-cbc -K $encrypted_42099b4af021_key -iv $encrypted_42099b4af021_iv -in pj-renamed-service-account.json.enc -out app/pj-renamed-service-account.json -d # encrypted GCE service account / Travis CI CLI encrypted key file travis-encrypt YAML output line to be pasted here
 - curl https://sdk.cloud.google.com | bash > /dev/null;  # fetch config file & copy to instance
 - source $HOME/google-cloud-sdk/path.bash.inc # 'source' command is used to apply the config file
 - gcloud components update kubectl # install kubectl on instance, for future use (step 8 Apply all configs in k8s folder - see deploy.sh)
